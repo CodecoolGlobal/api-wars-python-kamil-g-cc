@@ -1,4 +1,6 @@
 <body>
+    <input type="button" id="prev" value="Previous page" disabled>
+    <input type="button" id="next" value="Next page" disabled>
     <table>
         <thead>
             <th>Name</th>
@@ -15,7 +17,9 @@
     <script>
 
         let tbody = document.getElementById("tbody");
-        
+        let nextapi = null;
+        let prevapi = null;
+
 		function addRow(name, diameter, climate, terrain, surfaceWater, population) {
             let tr = document.createElement("tr");
             let nameTd = document.createElement("td");
@@ -33,14 +37,40 @@
 
         }
 
-        function getPlanets() {
-            fetch("https://swapi.py4e.com/api/planets").then(response=>response.json()).then(data=>{
+        function getPlanets(api) {
+            tbody.innerHTML = ""
+            fetch(api).then(response=>response.json()).then(data=>{
+                nextapi = data.next;
+                prevapi = data.previous;
                 data.results.forEach(planet=>{
                     addRow(planet.name, planet.diameter, planet.climate);
                 })
+                let button_next = document.getElementById("next");
+                if (nextapi != null) {
+                    button_next.disabled=false;
+                    button_next.onclick = function() {
+                        getPlanets(nextapi)
+                    }
+                }
+                else {
+                    button_next.disabled=true;
+                }
+                let button_prev = document.getElementById("prev");
+                if (prevapi != null) {
+                    button_prev.disabled=false;
+                    button_prev.onclick = function() {
+                        getPlanets(prevapi)
+                    }
+                }
+                else {
+                    button_prev.disabled=true;
+                }
             })
         }
 
-		getPlanets()
+        
+
+
+		getPlanets("https://swapi.py4e.com/api/planets")
     </script>
 </body>
