@@ -1,0 +1,46 @@
+<body>
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Diameter</th>
+            <th>Climate</th>
+            <!--	
+			<th>Terrain</th>
+			<th>Surface water</th>
+			<th>Population</th>
+		-->
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+    <script>
+
+        let tbody = document.getElementById("tbody");
+        
+		function addRow(name, diameter, climate, terrain, surfaceWater, population) {
+            let tr = document.createElement("tr");
+            let nameTd = document.createElement("td");
+            nameTd.innerHTML = name;
+            let diameterTd = document.createElement("td");
+            diameterTd.innerHTML = diameter;
+            let climateTd = document.createElement("td");
+            climateTd.innerHTML = climate;
+
+            tr.appendChild(nameTd);
+            tr.appendChild(diameterTd);
+            tr.appendChild(climateTd);
+
+            tbody.appendChild(tr);
+
+        }
+
+        function getPlanets() {
+            fetch("https://swapi.py4e.com/api/planets").then(response=>response.json()).then(data=>{
+                data.results.forEach(planet=>{
+                    addRow(planet.name, planet.diameter, planet.climate);
+                })
+            })
+        }
+
+		getPlanets()
+    </script>
+</body>
