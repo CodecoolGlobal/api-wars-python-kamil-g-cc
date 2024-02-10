@@ -21,7 +21,7 @@ function manageButtons(nextURL, prevURL){
     if(prevURL){
         PREV_BTN.onclick = function(){
             disableButtons();
-            getPlanets(nextURL);
+            getPlanets(prevURL);
         }
         PREV_BTN.disabled = false;
     } else {
@@ -38,6 +38,7 @@ function getPlanets(url){
         if(response.ok){
             return response.json()
         }
+        console.error('wtf');
     }, (error)=>{
         console.error(error);
         alert('please try again');
